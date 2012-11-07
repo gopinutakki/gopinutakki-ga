@@ -1,0 +1,7 @@
+mvn clean install
+
+do target/lib wrzucic wszystkie jar-y zaleznosci.
+ Sa we frameworku Watchmakera, maven je sciaga do katalogu uzykownika/.m2, jakos mozna to ustalic jeszcze w pom.xml mavena zeby sam kopiowal albo wogole inaczej to bildowac jakos.
+
+uruchamia example jakistam
+java -cp "niching-0.0.1-SNAPSHOT.jar;lib/*" pl.edu.agh.niching.App
