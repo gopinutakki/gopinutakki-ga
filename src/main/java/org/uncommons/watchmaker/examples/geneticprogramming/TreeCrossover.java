@@ -46,7 +46,7 @@ public class TreeCrossover extends AbstractCrossover<Node>
      * between the two parents.
      */
     @Override
-    protected List<Node> mate(Node parent1,
+    protected  List<Node> mate(Node parent1,
                               Node parent2,
                               int numberOfCrossoverPoints,
                               Random rng)

@@ -11,6 +11,6 @@ public class App
     public static void main( String[] args )
     {
         System.out.println( "Hello World!" );
-        Launcher.main(new String[]{"bits"});
+        Launcher.main(new String[]{"gp"});
     }
 }
