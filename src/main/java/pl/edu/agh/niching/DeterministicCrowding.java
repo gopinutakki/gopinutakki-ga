@@ -1,22 +1,12 @@
 package pl.edu.agh.niching;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.uncommons.maths.binary.BitString;
-import org.uncommons.maths.number.NumberGenerator;
-import org.uncommons.maths.random.GaussianGenerator;
 import org.uncommons.maths.random.MersenneTwisterRNG;
 import org.uncommons.maths.random.Probability;
 import org.uncommons.watchmaker.examples.EvolutionLogger;
-import org.uncommons.watchmaker.examples.geneticprogramming.Node;
-import org.uncommons.watchmaker.examples.geneticprogramming.Simplification;
-import org.uncommons.watchmaker.examples.geneticprogramming.TreeCrossover;
-import org.uncommons.watchmaker.examples.geneticprogramming.TreeEvaluator;
-import org.uncommons.watchmaker.examples.geneticprogramming.TreeFactory;
-import org.uncommons.watchmaker.examples.geneticprogramming.TreeMutation;
 import org.uncommons.watchmaker.framework.EvaluatedCandidate;
 import org.uncommons.watchmaker.framework.EvolutionEngine;
 import org.uncommons.watchmaker.framework.EvolutionaryOperator;
@@ -24,9 +14,7 @@ import org.uncommons.watchmaker.framework.GenerationalEvolutionEngine;
 import org.uncommons.watchmaker.framework.factories.BitStringFactory;
 import org.uncommons.watchmaker.framework.operators.BitStringMutation;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
-import org.uncommons.watchmaker.framework.selection.RouletteWheelSelection;
 import org.uncommons.watchmaker.framework.termination.GenerationCount;
-import org.uncommons.watchmaker.framework.termination.TargetFitness;
 
 public class DeterministicCrowding {
 

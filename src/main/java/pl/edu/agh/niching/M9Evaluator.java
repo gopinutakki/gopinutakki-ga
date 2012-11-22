@@ -3,7 +3,6 @@ package pl.edu.agh.niching;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jfree.xml.util.Base64;
 import org.uncommons.maths.binary.BitString;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
@@ -37,16 +36,20 @@ public class M9Evaluator implements FitnessEvaluator<BitString>{
 		double minDistance = Double.MAX_VALUE;
 		for (BitString g: G)
 		{
-			double distance = MathHelper.hummingDistance(a, g);
+			double distance = MathHelper.hammingDistance(a, g);
 			if (distance < minDistance)
 				minDistance = distance;
 		}
 		return minDistance;
 	}
 	
+	/**
+	 * Implementation of {@code FitnessEvaluator.isNatural()} as described in 
+	 * http://watchmaker.uncommons.org/api/org/uncommons/watchmaker/framework/FitnessEvaluator.html#isNatural()
+	 * 
+	 * @return true, as this is a natural fitness scoring
+	 */
 	public boolean isNatural() {
-		// TODO 
-		// chyba chodzi o porzadek, im wiecej tym lepiej czy im mniej tym lepiej
 		return true;
 	}
 	

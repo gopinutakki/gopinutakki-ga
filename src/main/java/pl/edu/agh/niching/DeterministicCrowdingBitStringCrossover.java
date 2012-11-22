@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Random;
 
 import org.uncommons.maths.binary.BitString;
-import org.uncommons.watchmaker.examples.geneticprogramming.Node;
-import org.uncommons.watchmaker.examples.geneticprogramming.TreeCrossover;
 import org.uncommons.watchmaker.framework.operators.BitStringCrossover;
 
 

@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.uncommons.maths.binary.BitString;
 import org.uncommons.watchmaker.framework.EvaluatedCandidate;
 import org.uncommons.watchmaker.framework.SelectionStrategy;
 
@@ -22,14 +21,14 @@ public class DeterministicCrowdingSelectionStrategy implements
 		{
 			// trzeba ustalic wartosc fitness
 			// wiec trzeba znaleźć w populacji osobniki
-			// byc moze nie trzeba tego, bo osobniki byc moze sa posortowane w liscie wg fintess
-			// performanocwo to moze byc slabe
+			// byc moze nie trzeba tego, bo osobniki byc moze sa posortowane w liscie wg fitness
+			// wydajnościowo to moze byc slabe
 			//EvaluatedCandidate<BitString> parent1 = GetEvaluatedCandidate(population, family.Parent1);
 			//EvaluatedCandidate<BitString> parent2 = GetEvaluatedCandidate(population, family.Parent2);
 			
 			// dobieramy rodzicow i dzieci w pary gdzie rodzic i dziecko sa bardziej podobni do siebie
-			if (MathHelper.hummingDistance(family.Parent1, family.Child1) + MathHelper.hummingDistance(family.Parent2, family.Child2) 
-					<= MathHelper.hummingDistance(family.Parent1, family.Child2) + MathHelper.hummingDistance(family.Parent2, family.Child1))
+			if (MathHelper.hammingDistance(family.Parent1, family.Child1) + MathHelper.hammingDistance(family.Parent2, family.Child2) 
+					<= MathHelper.hammingDistance(family.Parent1, family.Child2) + MathHelper.hammingDistance(family.Parent2, family.Child1))
 			// w nowym pokoleniu zostaje bardziej przystosowany osobnik z pary
 			{
 				if (population.indexOf(family.Parent1)  >= population.indexOf(family.Child1))
