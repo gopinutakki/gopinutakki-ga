@@ -11,6 +11,7 @@ public class App
     public static void main( String[] args )
     {
         System.out.println( "Hello World!" );
-        Launcher.main(new String[]{"gp"});
+        DeterministicCrowding.main(args);
+        //Launcher.main(new String[]{"gp"});
     }
 }

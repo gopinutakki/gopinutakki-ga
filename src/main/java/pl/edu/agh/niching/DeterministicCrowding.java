@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.uncommons.maths.binary.BitString;
+import org.uncommons.maths.number.NumberGenerator;
+import org.uncommons.maths.random.GaussianGenerator;
 import org.uncommons.maths.random.MersenneTwisterRNG;
 import org.uncommons.maths.random.Probability;
 import org.uncommons.watchmaker.examples.EvolutionLogger;
@@ -14,9 +17,12 @@ import org.uncommons.watchmaker.examples.geneticprogramming.TreeCrossover;
 import org.uncommons.watchmaker.examples.geneticprogramming.TreeEvaluator;
 import org.uncommons.watchmaker.examples.geneticprogramming.TreeFactory;
 import org.uncommons.watchmaker.examples.geneticprogramming.TreeMutation;
+import org.uncommons.watchmaker.framework.EvaluatedCandidate;
 import org.uncommons.watchmaker.framework.EvolutionEngine;
 import org.uncommons.watchmaker.framework.EvolutionaryOperator;
 import org.uncommons.watchmaker.framework.GenerationalEvolutionEngine;
+import org.uncommons.watchmaker.framework.factories.BitStringFactory;
+import org.uncommons.watchmaker.framework.operators.BitStringMutation;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
 import org.uncommons.watchmaker.framework.selection.RouletteWheelSelection;
 import org.uncommons.watchmaker.framework.termination.TargetFitness;
@@ -24,24 +30,10 @@ import org.uncommons.watchmaker.framework.termination.TargetFitness;
 public class DeterministicCrowding {
 
 
-	    // This data describes the problem.  For each pair of inputs, the generated program
-	    // should return the associated output.  The goal of this appliction is to generalise
-	    // the examples into an equation.
-	    private static final Map<double[], Double> TEST_DATA = new HashMap<double[], Double>();
-	    static
-	    {
-	        TEST_DATA.put(new double[]{26, 35}, 829.0d);
-	        TEST_DATA.put(new double[]{8, 24}, 141.0d);
-	        TEST_DATA.put(new double[]{20, 1}, 467.0d);
-	        TEST_DATA.put(new double[]{33, 11}, 1215.0d);
-	        TEST_DATA.put(new double[]{37, 16}, 1517.0d);
-	    }
-
-
 	    public static void main(String[] args)
 	    {
-	        Node program = evolveProgram(TEST_DATA);
-	        System.out.println(program.print());
+	        List<EvaluatedCandidate<BitString>> program = evolveProgram();
+	        //System.out.println(program.print());
 	    }
 
 
@@ -51,9 +43,8 @@ public class DeterministicCrowding {
 	     * @return A program that generates the correct outputs for all specified
 	     * sets of input.
 	     */
-	    public static Node evolveProgram(Map<double[], Double> data)
+	    public static List<EvaluatedCandidate<BitString>> evolveProgram()
 	    {
-	    	// TODO Auto-generated method stub
 			/*
 			 * 
 			 * if (d(p1 : c10) + d(p2 : c20)) <= (d(p1 : c20) + d(p2 : c10)) then
@@ -68,25 +59,22 @@ public class DeterministicCrowding {
 				end
 			 */
 	    	
-	        TreeFactory factory = new TreeFactory(2, // Number of parameters passed into each program.
-	                                              4, // Maximum depth of generated trees.
-	                                              Probability.EVENS, // Probability that a node is a function node.
-	                                              new Probability(0.6d)); // Probability that other nodes are params rather than constants.
-	        List<EvolutionaryOperator<Node>> operators = new ArrayList<EvolutionaryOperator<Node>>(3);
+	        List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(2);
 	        
 	        // changed order
-	        operators.add(new DeterministicCrowdingTreeCrossover());
-	        operators.add(new TreeMutation(factory, new Probability(0.4d)));
-	        //whats simplification, needed
+	        operators.add(new DeterministicCrowdingBitStringCrossover());
+	        operators.add(new BitStringMutation(new Probability(0.01)));
+	        //what is simplification, is it needed as in example
 	        //operators.add(new Simplification());
 	        
-	        TreeEvaluator evaluator = new TreeEvaluator(data);
-	        EvolutionEngine<Node> engine = new GenerationalEvolutionEngine<Node>(factory,
-	                                                                             new EvolutionPipeline<Node>(operators),
+	        M9Evaluator evaluator = new M9Evaluator();
+	        EvolutionEngine<BitString> engine = new GenerationalEvolutionEngine<BitString>(
+        																		new BitStringFactory(32),
+	                                                                             new EvolutionPipeline<BitString>(operators),
 	                                                                             evaluator,
 	                                                                             new DeterministicCrowdingSelectionStrategy(),
 	                                                                             new MersenneTwisterRNG());
-	        engine.addEvolutionObserver(new EvolutionLogger<Node>());
-	        return engine.evolve(1000, 5, new TargetFitness(0d, evaluator.isNatural()));
+	        engine.addEvolutionObserver(new EvolutionLogger<BitString>());
+	        return engine.evolvePopulation(1000, 0, new TargetFitness(0d, evaluator.isNatural()));
 	    }
 }
