@@ -55,6 +55,14 @@ public class DeterministicCrowdingSelectionStrategy implements
 		}
 		
 		PopulationRepository.population.clear();
+
+		// first time there no crossing so nothing in repostiory, so wer returning all
+		//todo: change
+		if (selected.size() == 0)
+			for (EvaluatedCandidate<BitString> cand :population){
+				selected.add(cand.getCandidate());
+			}
+		System.out.println( "Pop count: " + selected.size() );
 		return selected;
 	}
 	

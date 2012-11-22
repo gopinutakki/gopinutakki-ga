@@ -21,7 +21,7 @@ public class DeterministicCrowdingBitStringCrossover extends BitStringCrossover 
 		family.setParent1(parent1);
 		family.Parent2 = parent2;
 		family.Child1 = childerns.get(0);
-		family.Child1 = childerns.get(0);
+		family.Child2 = childerns.get(1);
 		PopulationRepository.population.add(family);
 		
 		childerns.add(parent1);
