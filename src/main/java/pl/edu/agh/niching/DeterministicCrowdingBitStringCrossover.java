@@ -14,12 +14,11 @@ public class DeterministicCrowdingBitStringCrossover extends BitStringCrossover 
 		// adding parents to next generation after crossing and setting the family
 		List<BitString> childerns =  super.mate(parent1, parent2, numberOfCrossoverPoints, rng);
 		
-		//todo: setters getters etc.
-		Family family= new Family();
+		Family<BitString> family= new Family<BitString>();
 		family.setParent1(parent1);
-		family.Parent2 = parent2;
-		family.Child1 = childerns.get(0);
-		family.Child2 = childerns.get(1);
+		family.setParent2(parent2);
+		family.setChild1(childerns.get(0));
+		family.setChild2(childerns.get(1));
 		PopulationRepository.population.add(family);
 		
 		childerns.add(parent1);

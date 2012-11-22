@@ -17,6 +17,7 @@ public class DeterministicCrowdingSelectionStrategy implements
 		// powstale podczas krzyzowania i mutacji skladajace se z 2 rodziców i 2 dzieci
 		List<BitString> selected = new ArrayList<BitString>();
 		//List<EvaluatedCandidate<BitString>> processedIndividuals = new ArrayList<EvaluatedCandidate<BitString>>();
+		// FIXME tu jest straszne BitStringowe zamieszanie
 		for (Family<org.uncommons.maths.binary.BitString> family: PopulationRepository.population)
 		{
 			// trzeba ustalic wartosc fitness
@@ -27,36 +28,36 @@ public class DeterministicCrowdingSelectionStrategy implements
 			//EvaluatedCandidate<BitString> parent2 = GetEvaluatedCandidate(population, family.Parent2);
 			
 			// dobieramy rodzicow i dzieci w pary gdzie rodzic i dziecko sa bardziej podobni do siebie
-			if (MathHelper.hammingDistance(family.Parent1, family.Child1) + MathHelper.hammingDistance(family.Parent2, family.Child2) 
-					<= MathHelper.hammingDistance(family.Parent1, family.Child2) + MathHelper.hammingDistance(family.Parent2, family.Child1))
+			if (MathHelper.hammingDistance(family.getParent1(), family.getChild1()) + MathHelper.hammingDistance(family.getParent2(), family.getChild2()) 
+					<= MathHelper.hammingDistance(family.getParent1(), family.getChild2()) + MathHelper.hammingDistance(family.getParent2(), family.getChild1()))
 			// w nowym pokoleniu zostaje bardziej przystosowany osobnik z pary
 			{
-				if (population.indexOf(family.Parent1)  >= population.indexOf(family.Child1))
-					selected.add((BitString) family.Parent1);
+				if (population.indexOf(family.getParent1())  >= population.indexOf(family.getChild1()))
+					selected.add((BitString) family.getParent1());
 				else
-					selected.add((BitString) family.Child1);
-				if (population.indexOf(family.Parent2)  >= population.indexOf(family.Child2))
-					selected.add((BitString) family.Parent2);
+					selected.add((BitString) family.getChild1());
+				if (population.indexOf(family.getParent2())  >= population.indexOf(family.getChild2()))
+					selected.add((BitString) family.getParent2());
 				else
-					selected.add((BitString) family.Child2);
+					selected.add((BitString) family.getChild2());
 			}
 			else
 			{
-				if (population.indexOf(family.Parent1)  >= population.indexOf(family.Child2))
-					selected.add((BitString) family.Parent1);
+				if (population.indexOf(family.getParent1())  >= population.indexOf(family.getChild2()))
+					selected.add((BitString) family.getParent1());
 				else
-					selected.add((BitString) family.Child2);
-				if (population.indexOf(family.Parent2)  >= population.indexOf(family.Child1))
-					selected.add((BitString) family.Parent2);
+					selected.add((BitString) family.getChild2());
+				if (population.indexOf(family.getParent2())  >= population.indexOf(family.getChild1()))
+					selected.add((BitString) family.getParent2());
 				else
-					selected.add((BitString) family.Child1);
+					selected.add((BitString) family.getChild1());
 			}
 		}
 		
 		PopulationRepository.population.clear();
 
 		// first time there no crossing so nothing in repostiory, so wer returning all
-		//todo: change
+		// TODO change
 		if (selected.size() == 0)
 			for (EvaluatedCandidate<BitString> cand :population){
 				selected.add(cand.getCandidate());
