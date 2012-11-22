@@ -62,7 +62,7 @@ public class DeterministicCrowdingSelectionStrategy implements
 			for (EvaluatedCandidate<BitString> cand :population){
 				selected.add(cand.getCandidate());
 			}
-		System.out.println( "Pop count: " + selected.size() );
+		//System.out.println( "Pop count: " + selected.size() );
 		return selected;
 	}
 	

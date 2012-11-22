@@ -47,7 +47,7 @@ public class M9Evaluator implements FitnessEvaluator<BitString>{
 	public boolean isNatural() {
 		// TODO 
 		// chyba chodzi o porzadek, im wiecej tym lepiej czy im mniej tym lepiej
-		return false;
+		return true;
 	}
 	
 

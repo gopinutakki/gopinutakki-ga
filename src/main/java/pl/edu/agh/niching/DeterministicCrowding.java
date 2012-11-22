@@ -25,6 +25,7 @@ import org.uncommons.watchmaker.framework.factories.BitStringFactory;
 import org.uncommons.watchmaker.framework.operators.BitStringMutation;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
 import org.uncommons.watchmaker.framework.selection.RouletteWheelSelection;
+import org.uncommons.watchmaker.framework.termination.GenerationCount;
 import org.uncommons.watchmaker.framework.termination.TargetFitness;
 
 public class DeterministicCrowding {
@@ -75,6 +76,6 @@ public class DeterministicCrowding {
 	                                                                             new DeterministicCrowdingSelectionStrategy(),
 	                                                                             new MersenneTwisterRNG());
 	        engine.addEvolutionObserver(new EvolutionLogger<BitString>());
-	        return engine.evolvePopulation(1000, 0, new TargetFitness(0d, evaluator.isNatural()));
+	        return engine.evolvePopulation(1000, 0, new GenerationCount(10000)/* new TargetFitness(0d, evaluator.isNatural())*/);
 	    }
 }
