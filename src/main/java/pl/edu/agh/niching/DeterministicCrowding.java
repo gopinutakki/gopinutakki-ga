@@ -21,7 +21,7 @@ public class DeterministicCrowding {
 	    public static void main(String[] args)
 	    {
 	        List<EvaluatedCandidate<BitString>> program = evolveProgram();
-	        //System.out.println(program.print());
+	        //M9Evaluator.plotFitnessFunction();
 	    }
 
 
@@ -31,9 +31,9 @@ public class DeterministicCrowding {
 	     * @return A program that generates the correct outputs for all specified
 	     * sets of input.
 	     */
-	    public static List<EvaluatedCandidate<BitString>> evolveProgram()
-	    {
-			/*
+	    public static List<EvaluatedCandidate<BitString>> evolveProgram() {
+			// FIXME co to?
+	    	/*
 			 * 
 			 * if (d(p1 : c10) + d(p2 : c20)) <= (d(p1 : c20) + d(p2 : c10)) then
 				begin
@@ -62,7 +62,7 @@ public class DeterministicCrowding {
 	                                                                             evaluator,
 	                                                                             new DeterministicCrowdingSelectionStrategy(),
 	                                                                             new MersenneTwisterRNG());
-	        engine.addEvolutionObserver(new EvolutionLogger<BitString>());
+	        //engine.addEvolutionObserver(new EvolutionLogger<BitString>());
 	        return engine.evolvePopulation(500, 0, new GenerationCount(1000)/* new TargetFitness(0d, evaluator.isNatural())*/);
 	    }
 }

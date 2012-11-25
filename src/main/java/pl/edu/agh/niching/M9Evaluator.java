@@ -18,6 +18,7 @@ public class M9Evaluator implements FitnessEvaluator<BitString>{
 		
 	}
 	
+	@Override
 	public double getFitness(BitString candidate, List<? extends BitString> population) {
 		double result = 0.0d;
 		for (int i=0; i<candidate.getLength();){
@@ -49,10 +50,25 @@ public class M9Evaluator implements FitnessEvaluator<BitString>{
 	 * 
 	 * @return true, as this is a natural fitness scoring
 	 */
+	@Override
 	public boolean isNatural() {
 		return true;
 	}
 	
-
+	/**
+	 * Prints fitness function (M9) evaluation to stdout in order to plot it later.
+	 * Generating all that BitStrings takes loads of memory and time.
+	 */
+	public static void plotFitnessFunction() {
+		ArrayList<BitString> fitnessRange = new ArrayList<BitString>();
+        String bits;
+        String zeros = "000000000000000000000000";
+        for (int i=0; i<256*256*256; i++) {
+        	bits = Integer.toBinaryString(MathHelper.grayCode(i));
+        	bits = zeros.substring(bits.length()) + bits;
+        	fitnessRange.add(new BitString(bits));
+        }
+        GraphHelper.printFunctionPlot(new M9Evaluator(), fitnessRange, System.out);
+	}
 
 }

@@ -20,4 +20,17 @@ public class MathHelper {
 		}
 		return distance;
 	}
+	
+	/**
+	 * <p>Transforms integer values into Gray code (reflected binary code).</p> 
+	 * <p>This method will be used to order elements according to their Hamming distance
+	 * (ie every 2 consecutive values differ by only 1 bit).</p>
+	 * <p>It operates on integers, because it is easier that way (and we may need it somewhere else).</p> 
+	 * 
+	 * @param number the number whose Gray code we want
+	 * @return graycoded value of {@code number}
+	 */
+	public static int grayCode(int number) {
+		return ((number >> 1) ^ number);
+	}
 }
