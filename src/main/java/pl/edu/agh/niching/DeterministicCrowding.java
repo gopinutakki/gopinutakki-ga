@@ -6,7 +6,6 @@ import java.util.List;
 import org.uncommons.maths.binary.BitString;
 import org.uncommons.maths.random.MersenneTwisterRNG;
 import org.uncommons.maths.random.Probability;
-import org.uncommons.watchmaker.examples.EvolutionLogger;
 import org.uncommons.watchmaker.framework.EvaluatedCandidate;
 import org.uncommons.watchmaker.framework.EvolutionEngine;
 import org.uncommons.watchmaker.framework.EvolutionaryOperator;
@@ -58,12 +57,12 @@ public class DeterministicCrowding {
 	        
 	        M9Evaluator evaluator = new M9Evaluator();
 	        EvolutionEngine<BitString> engine = new GenerationalEvolutionEngine<BitString>(
-        																		new BitStringFactory(32),
+        																		new BitStringFactory(24),
 	                                                                             new EvolutionPipeline<BitString>(operators),
 	                                                                             evaluator,
 	                                                                             new DeterministicCrowdingSelectionStrategy(),
 	                                                                             new MersenneTwisterRNG());
 	        engine.addEvolutionObserver(new EvolutionLogger<BitString>());
-	        return engine.evolvePopulation(1000, 0, new GenerationCount(10000)/* new TargetFitness(0d, evaluator.isNatural())*/);
+	        return engine.evolvePopulation(500, 0, new GenerationCount(1000)/* new TargetFitness(0d, evaluator.isNatural())*/);
 	    }
 }

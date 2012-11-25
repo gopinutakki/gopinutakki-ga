@@ -32,22 +32,22 @@ public class DeterministicCrowdingSelectionStrategy implements
 					<= MathHelper.hammingDistance(family.getParent1(), family.getChild2()) + MathHelper.hammingDistance(family.getParent2(), family.getChild1()))
 			// w nowym pokoleniu zostaje bardziej przystosowany osobnik z pary
 			{
-				if (population.indexOf(family.getParent1())  >= population.indexOf(family.getChild1()))
+				if (population.indexOf(family.getParent1())  < population.indexOf(family.getChild1()))
 					selected.add((BitString) family.getParent1());
 				else
 					selected.add((BitString) family.getChild1());
-				if (population.indexOf(family.getParent2())  >= population.indexOf(family.getChild2()))
+				if (population.indexOf(family.getParent2())  < population.indexOf(family.getChild2()))
 					selected.add((BitString) family.getParent2());
 				else
 					selected.add((BitString) family.getChild2());
 			}
 			else
 			{
-				if (population.indexOf(family.getParent1())  >= population.indexOf(family.getChild2()))
+				if (population.indexOf(family.getParent1())  < population.indexOf(family.getChild2()))
 					selected.add((BitString) family.getParent1());
 				else
 					selected.add((BitString) family.getChild2());
-				if (population.indexOf(family.getParent2())  >= population.indexOf(family.getChild1()))
+				if (population.indexOf(family.getParent2())  < population.indexOf(family.getChild1()))
 					selected.add((BitString) family.getParent2());
 				else
 					selected.add((BitString) family.getChild1());
@@ -64,14 +64,6 @@ public class DeterministicCrowdingSelectionStrategy implements
 			}
 		//System.out.println( "Pop count: " + selected.size() );
 		return selected;
-	}
-	
-	private <BitString> EvaluatedCandidate<BitString> GetEvaluatedCandidate(List<EvaluatedCandidate<BitString>> population, BitString parent1){
-		for (EvaluatedCandidate<BitString> one: population){
-			if (one.getCandidate().equals(parent1))
-				return one;
-		}
-		return null;
 	}
 	
 
