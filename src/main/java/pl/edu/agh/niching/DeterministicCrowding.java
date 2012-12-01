@@ -20,7 +20,7 @@ public class DeterministicCrowding {
 
 	    public static void main(String[] args)
 	    {
-	        List<EvaluatedCandidate<BitString>> program = evolveProgram();
+	        List<EvaluatedCandidate<BitString>> program = evolveProgramM1();
 	        //M9Evaluator.plotFitnessFunction();
 	    }
 
@@ -31,8 +31,8 @@ public class DeterministicCrowding {
 	     * @return A program that generates the correct outputs for all specified
 	     * sets of input.
 	     */
-	    public static List<EvaluatedCandidate<BitString>> evolveProgram() {
-			// FIXME co to?
+	    public static List<EvaluatedCandidate<BitString>> evolveProgramM9() {
+			// pseudokod deterministic crowding
 	    	/*
 			 * 
 			 * if (d(p1 : c10) + d(p2 : c20)) <= (d(p1 : c20) + d(p2 : c10)) then
@@ -49,7 +49,6 @@ public class DeterministicCrowding {
 	    	
 	        List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(2);
 	        
-	        // changed order
 	        operators.add(new DeterministicCrowdingBitStringCrossover());
 	        operators.add(new BitStringMutation(new Probability(0.01)));
 	        //what is simplification, is it needed as in example
@@ -63,6 +62,29 @@ public class DeterministicCrowding {
 	                                                                             new DeterministicCrowdingSelectionStrategy(),
 	                                                                             new MersenneTwisterRNG());
 	        //engine.addEvolutionObserver(new EvolutionLogger<BitString>());
+	        return engine.evolvePopulation(500, 0, new GenerationCount(1000)/* new TargetFitness(0d, evaluator.isNatural())*/);
+	    }
+	    
+	    
+	    //todo: refactoring
+	    public static List<EvaluatedCandidate<BitString>> evolveProgramM1() {
+
+	    	
+	        List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(2);
+	        
+	        operators.add(new DeterministicCrowdingBitStringCrossover());
+	        operators.add(new BitStringMutation(new Probability(0.01)));
+	        //what is simplification, is it needed as in example
+	        //operators.add(new Simplification());
+	        
+	        M1Evaluator evaluator = new M1Evaluator();
+	        EvolutionEngine<BitString> engine = new GenerationalEvolutionEngine<BitString>(
+        																		new BitStringFactory(30),
+	                                                                             new EvolutionPipeline<BitString>(operators),
+	                                                                             evaluator,
+	                                                                             new DeterministicCrowdingSelectionStrategy(),
+	                                                                             new MersenneTwisterRNG());
+	        engine.addEvolutionObserver(new EvolutionLogger<BitString>());
 	        return engine.evolvePopulation(500, 0, new GenerationCount(1000)/* new TargetFitness(0d, evaluator.isNatural())*/);
 	    }
 }
