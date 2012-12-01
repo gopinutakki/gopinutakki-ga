@@ -1,4 +1,4 @@
-package pl.edu.agh.niching;
+package pl.edu.agh.niching.evaluators;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,12 +6,19 @@ import java.util.List;
 import org.uncommons.maths.binary.BitString;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
-public class M1Evaluator implements FitnessEvaluator<BitString>{
+public class M1Evaluator extends MEvaluator{
 	
 	/*
 	 * M1(x) = sin^6(5*pi*x)
 	 * x = [0,1]
 	 * */
+	
+	private int cadidateBitLenght = 30;
+	
+	public int getCadidateBitLenght(){
+		return cadidateBitLenght;
+	}
+	
 	@Override
 	public double getFitness(BitString candidate, List<? extends BitString> population) {
 		double x = toDouble(candidate);
@@ -30,16 +37,7 @@ public class M1Evaluator implements FitnessEvaluator<BitString>{
 		}
 		return a / Math.pow(2, i+1)-1;
 	}
-	/**
-	 * Implementation of {@code FitnessEvaluator.isNatural()} as described in 
-	 * http://watchmaker.uncommons.org/api/org/uncommons/watchmaker/framework/FitnessEvaluator.html#isNatural()
-	 * 
-	 * @return true, as this is a natural fitness scoring
-	 */
-	@Override
-	public boolean isNatural() {
-		return true;
-	}
+
 	
 
 	public static void plotFitnessFunction() {

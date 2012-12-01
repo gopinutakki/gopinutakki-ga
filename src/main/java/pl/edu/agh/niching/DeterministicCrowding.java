@@ -15,15 +15,18 @@ import org.uncommons.watchmaker.framework.operators.BitStringMutation;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
 import org.uncommons.watchmaker.framework.termination.GenerationCount;
 
+import pl.edu.agh.niching.evaluators.M1Evaluator;
+import pl.edu.agh.niching.evaluators.M9Evaluator;
+import pl.edu.agh.niching.evaluators.MEvaluator;
+
 public class DeterministicCrowding {
 
 
 	    public static void main(String[] args)
 	    {
-	        List<EvaluatedCandidate<BitString>> program = evolveProgramM1();
+	        List<EvaluatedCandidate<BitString>> program = evolveProgram(new M1Evaluator());
 	        //M9Evaluator.plotFitnessFunction();
 	    }
-
 
 	    /**
 	     * Evolve a function to fit the specified data.
@@ -31,7 +34,7 @@ public class DeterministicCrowding {
 	     * @return A program that generates the correct outputs for all specified
 	     * sets of input.
 	     */
-	    public static List<EvaluatedCandidate<BitString>> evolveProgramM9() {
+	    public static List<EvaluatedCandidate<BitString>> evolveProgram(MEvaluator evaluator) {
 			// pseudokod deterministic crowding
 	    	/*
 			 * 
@@ -54,32 +57,9 @@ public class DeterministicCrowding {
 	        //what is simplification, is it needed as in example
 	        //operators.add(new Simplification());
 	        
-	        M9Evaluator evaluator = new M9Evaluator();
-	        EvolutionEngine<BitString> engine = new GenerationalEvolutionEngine<BitString>(
-        																		new BitStringFactory(24),
-	                                                                             new EvolutionPipeline<BitString>(operators),
-	                                                                             evaluator,
-	                                                                             new DeterministicCrowdingSelectionStrategy(),
-	                                                                             new MersenneTwisterRNG());
-	        //engine.addEvolutionObserver(new EvolutionLogger<BitString>());
-	        return engine.evolvePopulation(500, 0, new GenerationCount(1000)/* new TargetFitness(0d, evaluator.isNatural())*/);
-	    }
-	    
-	    
-	    //todo: refactoring
-	    public static List<EvaluatedCandidate<BitString>> evolveProgramM1() {
 
-	    	
-	        List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(2);
-	        
-	        operators.add(new DeterministicCrowdingBitStringCrossover());
-	        operators.add(new BitStringMutation(new Probability(0.01)));
-	        //what is simplification, is it needed as in example
-	        //operators.add(new Simplification());
-	        
-	        M1Evaluator evaluator = new M1Evaluator();
 	        EvolutionEngine<BitString> engine = new GenerationalEvolutionEngine<BitString>(
-        																		new BitStringFactory(30),
+        																		new BitStringFactory(evaluator.getCadidateBitLenght()),
 	                                                                             new EvolutionPipeline<BitString>(operators),
 	                                                                             evaluator,
 	                                                                             new DeterministicCrowdingSelectionStrategy(),
@@ -87,4 +67,6 @@ public class DeterministicCrowding {
 	        engine.addEvolutionObserver(new EvolutionLogger<BitString>());
 	        return engine.evolvePopulation(500, 0, new GenerationCount(1000)/* new TargetFitness(0d, evaluator.isNatural())*/);
 	    }
+	    
+	
 }

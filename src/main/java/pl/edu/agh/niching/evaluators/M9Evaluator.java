@@ -1,4 +1,4 @@
-package pl.edu.agh.niching;
+package pl.edu.agh.niching.evaluators;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,18 @@ import java.util.List;
 import org.uncommons.maths.binary.BitString;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
-public class M9Evaluator implements FitnessEvaluator<BitString>{
+import pl.edu.agh.niching.GraphHelper;
+import pl.edu.agh.niching.MathHelper;
 
+public class M9Evaluator extends MEvaluator{
+
+	
+	private int cadidateBitLenght = 24;
+	
+	public int getCadidateBitLenght(){
+		return cadidateBitLenght;
+	}
+	
 	private List<BitString> G = new ArrayList<BitString>();
 	
 	public M9Evaluator() {
@@ -42,17 +52,6 @@ public class M9Evaluator implements FitnessEvaluator<BitString>{
 				minDistance = distance;
 		}
 		return minDistance;
-	}
-	
-	/**
-	 * Implementation of {@code FitnessEvaluator.isNatural()} as described in 
-	 * http://watchmaker.uncommons.org/api/org/uncommons/watchmaker/framework/FitnessEvaluator.html#isNatural()
-	 * 
-	 * @return true, as this is a natural fitness scoring
-	 */
-	@Override
-	public boolean isNatural() {
-		return true;
 	}
 	
 	/**
