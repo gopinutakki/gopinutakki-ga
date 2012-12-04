@@ -1,11 +1,13 @@
 package pl.edu.agh.niching.evaluators;
 
 
+import java.io.IOException;
+
 import org.uncommons.maths.binary.BitString;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 public abstract class MEvaluator implements FitnessEvaluator<BitString>{
-	public abstract int getCadidateBitLenght();
+	public abstract int getCandidateBitLength();
 	
 	/**
 	 * Implementation of {@code FitnessEvaluator.isNatural()} as described in 
@@ -17,4 +19,13 @@ public abstract class MEvaluator implements FitnessEvaluator<BitString>{
 	public boolean isNatural() {
 		return true;
 	}
+	
+	/**
+	 * Use this to print fitness function evaluation to stdout for gnuplot input.
+	 * 
+	 * @throws IOException if anything bad happens while writing to a file
+	 */
+	public abstract void plotFitnessFunction() throws IOException;
+	
+	
 }

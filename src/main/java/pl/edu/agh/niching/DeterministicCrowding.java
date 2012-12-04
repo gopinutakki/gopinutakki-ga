@@ -1,5 +1,8 @@
 package pl.edu.agh.niching;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,17 +19,30 @@ import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
 import org.uncommons.watchmaker.framework.termination.GenerationCount;
 
 import pl.edu.agh.niching.evaluators.M1Evaluator;
-import pl.edu.agh.niching.evaluators.M9Evaluator;
 import pl.edu.agh.niching.evaluators.MEvaluator;
 
 public class DeterministicCrowding {
+	public static final String POPULATION_FILENAME = "population.log";
 
-
-	    public static void main(String[] args)
-	    {
-	        List<EvaluatedCandidate<BitString>> program = evolveProgram(new M1Evaluator());
-	        //M9Evaluator.plotFitnessFunction();
-	    }
+		public static void main(String[] args) {
+			MEvaluator evaluator = new M1Evaluator();
+			List<EvaluatedCandidate<BitString>> program = evolveProgram(evaluator);
+			
+			/* this should generate data for a graph
+			 * to draw it, use `gnuplot res\plotresult.cfg`
+			 * FIXME make this work correctly (as it doesn't seem to - maybe some precision issue?)
+			 */
+			try {
+				PrintStream populationStream = new PrintStream(new File(POPULATION_FILENAME));
+				GraphHelper.printPopulationData(program, program.size()/4, 0, populationStream);
+				populationStream.close();
+				evaluator.plotFitnessFunction();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			/* end of graph data generation */
+		}
 
 	    /**
 	     * Evolve a function to fit the specified data.
@@ -59,12 +75,12 @@ public class DeterministicCrowding {
 	        
 
 	        EvolutionEngine<BitString> engine = new GenerationalEvolutionEngine<BitString>(
-        																		new BitStringFactory(evaluator.getCadidateBitLenght()),
+        																		new BitStringFactory(evaluator.getCandidateBitLength()),
 	                                                                             new EvolutionPipeline<BitString>(operators),
 	                                                                             evaluator,
 	                                                                             new DeterministicCrowdingSelectionStrategy(),
 	                                                                             new MersenneTwisterRNG());
-	        engine.addEvolutionObserver(new EvolutionLogger<BitString>());
+	        //engine.addEvolutionObserver(new EvolutionLogger<BitString>());
 	        return engine.evolvePopulation(500, 0, new GenerationCount(1000)/* new TargetFitness(0d, evaluator.isNatural())*/);
 	    }
 	    

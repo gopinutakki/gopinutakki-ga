@@ -1,10 +1,14 @@
 package pl.edu.agh.niching.evaluators;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.uncommons.maths.binary.BitString;
-import org.uncommons.watchmaker.framework.FitnessEvaluator;
+
+import pl.edu.agh.niching.GraphHelper;
 
 public class M1Evaluator extends MEvaluator{
 	
@@ -12,11 +16,12 @@ public class M1Evaluator extends MEvaluator{
 	 * M1(x) = sin^6(5*pi*x)
 	 * x = [0,1]
 	 * */
+	private static final String OUTPUT_FILENAME = "m1.log";
+	private int candidateBitLength = 30;
 	
-	private int cadidateBitLenght = 30;
-	
-	public int getCadidateBitLenght(){
-		return cadidateBitLenght;
+	@Override
+	public int getCandidateBitLength(){
+		return candidateBitLength;
 	}
 	
 	@Override
@@ -27,21 +32,29 @@ public class M1Evaluator extends MEvaluator{
 	}
 	
 	
-	private double toDouble(BitString candidate){
+	private double toDouble(BitString candidate) {
 		int a=0;
-		int i=0;
-		for (; i< candidate.getLength();){
+		int i;
+		for (i=0; i< candidate.getLength(); i++) {
 			if (candidate.getBit(i))
 				a += Math.pow(2, i);
-			i++;
 		}
-		return a / Math.pow(2, i+1)-1;
+		return a / Math.pow(2, i-3)-1;
 	}
-
 	
-
-	public static void plotFitnessFunction() {
-		
+	@Override
+	public void plotFitnessFunction() throws IOException {
+		ArrayList<BitString> fitnessRange = new ArrayList<BitString>();
+        String bits;
+        String zeros = "00000000000000000000000000000000";
+        for (long i=0; i<Math.pow(2, candidateBitLength); i+=Math.pow(2, 12)) {
+        	bits = Long.toBinaryString(i);
+        	bits = zeros.substring(bits.length()) + bits;
+        	fitnessRange.add(new BitString(bits));
+        }
+        PrintStream outfile = new PrintStream(new File(OUTPUT_FILENAME)); 
+        GraphHelper.printLabelledFunctionPlot(this, fitnessRange, outfile);
+        outfile.close();
 	}
 
 }

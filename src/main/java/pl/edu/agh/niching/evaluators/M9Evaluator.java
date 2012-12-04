@@ -1,21 +1,23 @@
 package pl.edu.agh.niching.evaluators;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.uncommons.maths.binary.BitString;
-import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 import pl.edu.agh.niching.GraphHelper;
 import pl.edu.agh.niching.MathHelper;
 
 public class M9Evaluator extends MEvaluator{
 
+	private static final String OUTPUT_FILENAME = "m9.log";
+	private int candidateBitLength = 24;
 	
-	private int cadidateBitLenght = 24;
-	
-	public int getCadidateBitLenght(){
-		return cadidateBitLenght;
+	public int getCandidateBitLength(){
+		return candidateBitLength;
 	}
 	
 	private List<BitString> G = new ArrayList<BitString>();
@@ -55,10 +57,11 @@ public class M9Evaluator extends MEvaluator{
 	}
 	
 	/**
-	 * Prints fitness function (M9) evaluation to stdout in order to plot it later.
+	 * Prints fitness function (M9) evaluation into a text file in order to plot it later.
 	 * Generating all that BitStrings takes loads of memory and time.
 	 */
-	public static void plotFitnessFunction() {
+	@Override
+	public void plotFitnessFunction() throws IOException {
 		ArrayList<BitString> fitnessRange = new ArrayList<BitString>();
         String bits;
         String zeros = "000000000000000000000000";
@@ -67,7 +70,9 @@ public class M9Evaluator extends MEvaluator{
         	bits = zeros.substring(bits.length()) + bits;
         	fitnessRange.add(new BitString(bits));
         }
-        GraphHelper.printFunctionPlot(new M9Evaluator(), fitnessRange, System.out);
+        PrintStream outfile = new PrintStream(new File(OUTPUT_FILENAME));
+        GraphHelper.printSimpleFunctionPlot(this, fitnessRange, outfile);
+        outfile.close();
 	}
 
 }

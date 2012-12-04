@@ -7,4 +7,5 @@
 .settings/
 bin/
 target/
+output.png
 
