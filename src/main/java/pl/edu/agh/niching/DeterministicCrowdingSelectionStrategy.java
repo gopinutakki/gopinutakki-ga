@@ -6,8 +6,7 @@ import java.util.Random;
 import org.uncommons.watchmaker.framework.EvaluatedCandidate;
 import org.uncommons.watchmaker.framework.SelectionStrategy;
 
-public class DeterministicCrowdingSelectionStrategy implements
-	SelectionStrategy<Object> {
+public class DeterministicCrowdingSelectionStrategy implements SelectionStrategy<Object> {
 
 	public <BitString> List<BitString> select(List<EvaluatedCandidate<BitString>> population,
 			boolean naturalFitnessScores, int selectionSize, Random rng) {
@@ -18,6 +17,7 @@ public class DeterministicCrowdingSelectionStrategy implements
 		List<BitString> selected = new ArrayList<BitString>();
 		//List<EvaluatedCandidate<BitString>> processedIndividuals = new ArrayList<EvaluatedCandidate<BitString>>();
 		// FIXME tu jest straszne BitStringowe zamieszanie
+		
 		for (Family<org.uncommons.maths.binary.BitString> family: PopulationRepository.population)
 		{
 			// trzeba ustalic wartosc fitness

@@ -32,14 +32,8 @@ public class M1Evaluator extends MEvaluator{
 	}
 	
 	
-	private double toDouble(BitString candidate) {
-		int a=0;
-		int i;
-		for (i=0; i< candidate.getLength(); i++) {
-			if (candidate.getBit(i))
-				a += Math.pow(2, i);
-		}
-		return a / Math.pow(2, i-3)-1;
+	public double toDouble(BitString candidate) {
+		return candidate.toNumber().doubleValue() / Math.pow(2, candidateBitLength)-1;
 	}
 	
 	@Override
