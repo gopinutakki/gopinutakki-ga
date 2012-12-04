@@ -15,6 +15,14 @@ import org.uncommons.watchmaker.framework.FitnessEvaluator;
  *
  */
 public class GraphHelper {
+	/**
+	 * Prints to output data about final population in gnuplot format.
+	 * 
+	 * @param population	final population from {@code evolvePrgram()}
+	 * @param bestCount 	number of best-fitted individuals to print
+	 * @param randomCount	number of random individuals to be printed
+	 * @param output		output stream (eg. a file or stdout)
+	 */
 	public static <T> void printPopulationData(List<EvaluatedCandidate<T>> population, int bestCount, int randomCount, PrintStream output) {
 		bestCount = Math.min(bestCount, population.size());
 		randomCount = Math.min(randomCount, population.size()-bestCount);
@@ -60,7 +68,7 @@ public class GraphHelper {
 	 * @param output a {@link PrintStream} for the output (eg. {@code System.out}).
 	 */
 	public static <T> void printLabelledFunctionPlot(FitnessEvaluator<T> evaluator, List<T> range, PrintStream output) {
-		if (range.get(0) instanceof BitString) for (T element : range) {
+		if (!range.isEmpty() && range.get(0) instanceof BitString) for (T element : range) {
 			output.println(((BitString)element).toNumber().toString() 
 					+ " " + evaluator.getFitness(element, range));
 		} else for (T element : range) {
