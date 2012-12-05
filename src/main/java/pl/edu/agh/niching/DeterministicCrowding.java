@@ -14,18 +14,23 @@ import org.uncommons.watchmaker.framework.EvolutionEngine;
 import org.uncommons.watchmaker.framework.EvolutionaryOperator;
 import org.uncommons.watchmaker.framework.GenerationalEvolutionEngine;
 import org.uncommons.watchmaker.framework.factories.BitStringFactory;
-import org.uncommons.watchmaker.framework.operators.BitStringMutation;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
 import org.uncommons.watchmaker.framework.termination.GenerationCount;
 
-import pl.edu.agh.niching.evaluators.M1Evaluator;
-import pl.edu.agh.niching.evaluators.MEvaluator;
+import pl.edu.agh.niching.evaluators.*;
 
 public class DeterministicCrowding {
-	public static final String POPULATION_FILENAME = "population.log";
-
+	public static final String POPULATION_FILENAME1 = "populationM1.log";
+	public static final String POPULATION_FILENAME2 = "populationM2.log";
+	
 		public static void main(String[] args) {
-			MEvaluator evaluator = new M1Evaluator();
+			evolve(new M1Evaluator(), POPULATION_FILENAME1);
+			evolve(new M2Evaluator(), POPULATION_FILENAME2);
+			/* end of graph data generation */
+		}
+
+		private static void evolve(MEvaluator evaluator, String populationFileName) {
+	    	PopulationRepository.population.clear();
 			List<EvaluatedCandidate<BitString>> program = evolveProgram(evaluator);
 			
 			/* this should generate data for a graph
@@ -33,7 +38,7 @@ public class DeterministicCrowding {
 			 */
 			PrintStream populationStream = null;
 			try {
-				populationStream = new PrintStream(new File(POPULATION_FILENAME));
+				populationStream = new PrintStream(new File(populationFileName));
 				GraphHelper.printPopulationData(program, program.size(), 0, populationStream);
 				evaluator.plotFitnessFunction();
 			} catch (IOException e) {
@@ -41,7 +46,6 @@ public class DeterministicCrowding {
 			} finally {
 				if(populationStream!=null) populationStream.close();
 			}
-			/* end of graph data generation */
 		}
 
 	    /**
@@ -65,11 +69,12 @@ public class DeterministicCrowding {
 				if f (c10) > f (p2) then zamien p2 z c10
 				end
 			 */
+
 	    	
 	        List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(1);
 	        
 	        operators.add(new DeterministicCrowdingBitStringCrossover());
-	        //operators.add(new BitStringMutation(new Probability(0.01)));
+	        operators.add(new DeterministicCrowdingBitStringMutation(new Probability(0.01)));
 	        //what is simplification, is it needed as in example
 	        //operators.add(new Simplification());
 	        
@@ -81,7 +86,7 @@ public class DeterministicCrowding {
 	                                                                             new DeterministicCrowdingSelectionStrategy(),
 	                                                                             new MersenneTwisterRNG());
 	        //engine.addEvolutionObserver(new EvolutionLogger<BitString>());
-	        return engine.evolvePopulation(500, 0, new GenerationCount(1000)/* new TargetFitness(0d, evaluator.isNatural())*/);
+	        return engine.evolvePopulation(500, 0, new GenerationCount(15)/* new TargetFitness(0d, evaluator.isNatural())*/);
 	    }
 	    
 	
