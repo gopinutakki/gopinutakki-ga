@@ -79,25 +79,16 @@ public class DeterministicCrowdingSelectionStrategy implements SelectionStrategy
 	
 	//FIXME: czasem nie ma w poplacji tego co w family, dlaczego?
 	private <BitString> EvaluatedCandidate<BitString> GetEvaluatedCandidate(List<EvaluatedCandidate<BitString>> population, org.uncommons.maths.binary.BitString one){
-		try {
-			PrintStream populationStream = new PrintStream(new File("debug"+ one.toString() + ".txt"));
-			populationStream.println("one "+ one.toString());
+
 			for (EvaluatedCandidate<BitString> evaluatedCandidate: population){
-				populationStream.println(evaluatedCandidate.getCandidate().toString());
 				if (evaluatedCandidate.getCandidate().equals(one))//to equlas
 				{
-					populationStream.println("im returning");
-					populationStream.close();
+
 					return evaluatedCandidate;
 
 				}
 			}
-			populationStream.println("im returning NULLLLLL");
-			populationStream.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		return null;
 	}
 }

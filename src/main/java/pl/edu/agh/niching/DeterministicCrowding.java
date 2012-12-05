@@ -66,10 +66,10 @@ public class DeterministicCrowding {
 				end
 			 */
 	    	
-	        List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(2);
+	        List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(1);
 	        
 	        operators.add(new DeterministicCrowdingBitStringCrossover());
-	        operators.add(new BitStringMutation(new Probability(0.01)));
+	        //operators.add(new BitStringMutation(new Probability(0.01)));
 	        //what is simplification, is it needed as in example
 	        //operators.add(new Simplification());
 	        
