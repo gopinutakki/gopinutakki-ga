@@ -30,11 +30,10 @@ public class DeterministicCrowding {
 			
 			/* this should generate data for a graph
 			 * to draw it, use `gnuplot res\plotresult.cfg`
-			 * FIXME make this work correctly (as it doesn't seem to - maybe some precision issue?)
 			 */
 			try {
 				PrintStream populationStream = new PrintStream(new File(POPULATION_FILENAME));
-				GraphHelper.printPopulationData(program, program.size()/4, 0, populationStream);
+				GraphHelper.printPopulationData(program, program.size(), 0, populationStream);
 				populationStream.close();
 				evaluator.plotFitnessFunction();
 			} catch (IOException e) {

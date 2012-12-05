@@ -27,13 +27,12 @@ public class M1Evaluator extends MEvaluator{
 	@Override
 	public double getFitness(BitString candidate, List<? extends BitString> population) {
 		double x = toDouble(candidate);
-		
 		return Math.pow( Math.sin( 5 * Math.PI * x ), 6);
 	}
 	
 	
 	public double toDouble(BitString candidate) {
-		return candidate.toNumber().doubleValue() / Math.pow(2, candidateBitLength)-1;
+		return candidate.toNumber().doubleValue() / (Math.pow(2, candidateBitLength)-1);
 	}
 	
 	@Override
