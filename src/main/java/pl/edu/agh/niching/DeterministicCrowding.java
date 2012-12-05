@@ -31,14 +31,15 @@ public class DeterministicCrowding {
 			/* this should generate data for a graph
 			 * to draw it, use `gnuplot res\plotresult.cfg`
 			 */
+			PrintStream populationStream = null;
 			try {
-				PrintStream populationStream = new PrintStream(new File(POPULATION_FILENAME));
+				populationStream = new PrintStream(new File(POPULATION_FILENAME));
 				GraphHelper.printPopulationData(program, program.size(), 0, populationStream);
-				populationStream.close();
 				evaluator.plotFitnessFunction();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} finally {
+				if(populationStream!=null) populationStream.close();
 			}
 			/* end of graph data generation */
 		}
