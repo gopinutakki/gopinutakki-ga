@@ -10,7 +10,6 @@ import org.uncommons.watchmaker.framework.EvaluatedCandidate;
 import org.uncommons.watchmaker.framework.SelectionStrategy;
 
 public class DeterministicCrowdingSelectionStrategy implements SelectionStrategy<Object> {
-	
 	@SuppressWarnings("unchecked")
 	public <BitString> List<BitString> select(List<EvaluatedCandidate<BitString>> population,
 			boolean naturalFitnessScores, int selectionSize, Random rng) {
@@ -42,7 +41,7 @@ public class DeterministicCrowdingSelectionStrategy implements SelectionStrategy
 					<= MathHelper.hammingDistance(family.getParent1(), family.getChild2()) + MathHelper.hammingDistance(family.getParent2(), family.getChild1()))
 			// w nowym pokoleniu zostaje bardziej przystosowany osobnik z pary
 			{
-				if (parent1.getFitness()  > parent2.getFitness())
+				if (parent1.getFitness()  > child1.getFitness())
 					selected.add((BitString) family.getParent1());
 				else
 					selected.add((BitString) family.getChild1());
@@ -83,7 +82,6 @@ public class DeterministicCrowdingSelectionStrategy implements SelectionStrategy
 			for (EvaluatedCandidate<BitString> evaluatedCandidate: population){
 				if (evaluatedCandidate.getCandidate().equals(one))//to equlas
 				{
-
 					return evaluatedCandidate;
 
 				}
