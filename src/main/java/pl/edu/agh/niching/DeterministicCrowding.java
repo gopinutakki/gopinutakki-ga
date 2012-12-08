@@ -20,16 +20,15 @@ import org.uncommons.watchmaker.framework.termination.GenerationCount;
 import pl.edu.agh.niching.evaluators.*;
 
 public class DeterministicCrowding {
-	public static final String POPULATION_FILENAME1 = "populationM1.log";
-	public static final String POPULATION_FILENAME2 = "populationM2.log";
+	public static final String POPULATION_FILENAME_PREFIX = "population";
 	
 		public static void main(String[] args) {
-			evolve(new M1Evaluator(), POPULATION_FILENAME1);
-			evolve(new M2Evaluator(), POPULATION_FILENAME2);
+			evolve(new M1Evaluator());
+			evolve(new M2Evaluator());
 			/* end of graph data generation */
 		}
 
-		private static void evolve(MEvaluator evaluator, String populationFileName) {
+		private static void evolve(MEvaluator evaluator) {
 	    	PopulationRepository.population.clear();
 			List<EvaluatedCandidate<BitString>> program = evolveProgram(evaluator);
 			
@@ -37,15 +36,18 @@ public class DeterministicCrowding {
 			 * to draw it, use `gnuplot res\plotresult.cfg`
 			 */
 			PrintStream populationStream = null;
+			 //population at this point is twice big (), because contains 2 generations before selection
 			try {
-				populationStream = new PrintStream(new File(populationFileName));
+				populationStream = new PrintStream(new File(POPULATION_FILENAME_PREFIX + evaluator.getName()) + ".log");
 				GraphHelper.printPopulationData(program, program.size(), 0, populationStream);
+				//GraphHelper.printPopulationData(program, program.size(), 0, evaluator.getPopulationGifStream());
 				evaluator.plotFitnessFunction();
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
 				if(populationStream!=null) populationStream.close();
 			}
+			evaluator.getPopulationGifStream().close();
 		}
 
 	    /**
@@ -83,10 +85,11 @@ public class DeterministicCrowding {
         																		new BitStringFactory(evaluator.getCandidateBitLength()),
 	                                                                             new EvolutionPipeline<BitString>(operators),
 	                                                                             evaluator,
-	                                                                             new DeterministicCrowdingSelectionStrategy(),
+	                                                                             new DeterministicCrowdingSelectionStrategy(evaluator.getPopulationGifStream()),
 	                                                                             new MersenneTwisterRNG());
 	        //engine.addEvolutionObserver(new EvolutionLogger<BitString>());
-	        return engine.evolvePopulation(500, 0, new GenerationCount(15)/* new TargetFitness(0d, evaluator.isNatural())*/);
+	        // add +1
+	        return engine.evolvePopulation(500, 0, new GenerationCount(15+1));
 	    }
 	    
 	

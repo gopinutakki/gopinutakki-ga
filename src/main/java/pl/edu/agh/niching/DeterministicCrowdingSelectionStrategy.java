@@ -1,5 +1,6 @@
 package pl.edu.agh.niching;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -10,14 +11,22 @@ import org.uncommons.watchmaker.framework.EvaluatedCandidate;
 import org.uncommons.watchmaker.framework.SelectionStrategy;
 
 public class DeterministicCrowdingSelectionStrategy implements SelectionStrategy<Object> {
+	PrintStream populationStream;
+	public DeterministicCrowdingSelectionStrategy(PrintStream populationStream){
+		super();
+		this.populationStream = populationStream;
+
+	}
+	static int i = 0;
 	@SuppressWarnings("unchecked")
 	public <BitString> List<BitString> select(List<EvaluatedCandidate<BitString>> population,
 			boolean naturalFitnessScores, int selectionSize, Random rng) {
 		
-		
+		i++;
 		//populacja zawiera dwa pokolenia, rodziców i dzieci, trzeba znaleźć rodziny 
 		// powstale podczas krzyzowania i mutacji skladajace se z 2 rodziców i 2 dzieci
 		List<BitString> selected = new ArrayList<BitString>();
+		List<EvaluatedCandidate<BitString>> selectedEvaluated = new ArrayList<EvaluatedCandidate<BitString>>();
 		//List<EvaluatedCandidate<BitString>> processedIndividuals = new ArrayList<EvaluatedCandidate<BitString>>();
 		// FIXME tu jest straszne BitStringowe zamieszanie
 		
@@ -41,37 +50,57 @@ public class DeterministicCrowdingSelectionStrategy implements SelectionStrategy
 					<= MathHelper.hammingDistance(family.getParent1(), family.getChild2()) + MathHelper.hammingDistance(family.getParent2(), family.getChild1()))
 			// w nowym pokoleniu zostaje bardziej przystosowany osobnik z pary
 			{
-				if (parent1.getFitness()  > child1.getFitness())
+				if (parent1.getFitness()  > child1.getFitness()){
 					selected.add((BitString) family.getParent1());
-				else
+					selectedEvaluated.add(parent1);
+				}
+				else{
 					selected.add((BitString) family.getChild1());
-				if (parent2.getFitness()  > child2.getFitness())
+					selectedEvaluated.add(child1);
+				}
+				if (parent2.getFitness()  > child2.getFitness()){
 					selected.add((BitString) family.getParent2());
-				else
+					selectedEvaluated.add(parent2);
+				}
+				else{
 					selected.add((BitString) family.getChild2());
+					selectedEvaluated.add(child2);
+				}
 			}
 			else
 			{
-				if (parent1.getFitness()  > child2.getFitness())
+				if (parent1.getFitness()  > child2.getFitness()){
 					selected.add((BitString) family.getParent1());
-				else
+					selectedEvaluated.add(parent1);
+				}
+				else{
 					selected.add((BitString) family.getChild2());
-				if (parent2.getFitness()  > child1.getFitness())
+					selectedEvaluated.add(child2);
+				}
+				if (parent2.getFitness()  > child1.getFitness()){
 					selected.add((BitString) family.getParent2());
-				else
+					selectedEvaluated.add(parent2);
+				}
+				else{
 					selected.add((BitString) family.getChild1());
+					selectedEvaluated.add(child1);
+				}
 			}
 			
 		}
 		
+		GraphHelper.printPopulationData(selectedEvaluated, selectedEvaluated.size(), 0, populationStream);
+		//populationStream.println(" i:" + i +"selectedEvaluated: " + selectedEvaluated.size() + "selected:" + selected.size() + "population"+ population.size());
 		PopulationRepository.population.clear();
 
 		// first time there no crossing so nothing in repostiory, so wer returning all
 		// TODO change
-		if (selected.size() == 0)
+		if (selected.size() == 0){
+			GraphHelper.printPopulationData(population, population.size(), 0, populationStream);
 			for (EvaluatedCandidate<BitString> cand :population){
 				selected.add(cand.getCandidate());
 			}
+		}
 		//System.out.println( "Pop count: " + selected.size() );
 		return selected;
 	}

@@ -14,6 +14,12 @@ import pl.edu.agh.niching.MathHelper;
 public class M9Evaluator extends MEvaluator{
 
 	private static final String OUTPUT_FILENAME = "m9.log";
+	
+	@Override
+	public String getName(){
+		return "M9";
+	}
+	
 	private int candidateBitLength = 24;
 	
 	public int getCandidateBitLength(){

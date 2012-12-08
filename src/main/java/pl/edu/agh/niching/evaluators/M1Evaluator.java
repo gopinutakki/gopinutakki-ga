@@ -7,8 +7,8 @@ public class M1Evaluator extends M14Evaluator {
 		return Math.pow( Math.sin( 5 * Math.PI * x ), 6);
 	}
 	@Override
-	protected String getFileName() {
-		return "m1.log";
+	public String getName(){
+		return "M1";
 	}
 
 }

@@ -17,7 +17,7 @@ public abstract class M14Evaluator extends MEvaluator{
 	 * */
 
 	
-	private int candidateBitLength = 30;
+	private int candidateBitLength = 30;	
 	
 	@Override
 	public int getCandidateBitLength(){
@@ -31,8 +31,6 @@ public abstract class M14Evaluator extends MEvaluator{
 		double x = toDouble(candidate);
 		return function(x);
 	}
-	
-	protected abstract String getFileName();
 	
 	public double toDouble(BitString candidate) {
 		return candidate.toNumber().doubleValue() / (Math.pow(2, candidateBitLength)-1);
@@ -48,7 +46,7 @@ public abstract class M14Evaluator extends MEvaluator{
         	bits = zeros.substring(bits.length()) + bits;
         	fitnessRange.add(new BitString(bits));
         }
-        PrintStream outfile = new PrintStream(new File(getFileName())); 
+        PrintStream outfile = new PrintStream(new File(getName() + ".log")); 
         GraphHelper.printLabelledFunctionPlot(this, fitnessRange, outfile);
         outfile.close();
 	}
