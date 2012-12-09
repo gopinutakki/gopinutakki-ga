@@ -25,6 +25,9 @@ public class DeterministicCrowding {
 		public static void main(String[] args) {
 			evolve(new M1Evaluator());
 			evolve(new M2Evaluator());
+			evolve(new M3Evaluator());
+			evolve(new M4Evaluator());
+			//evolve(new M9Evaluator());
 			/* end of graph data generation */
 		}
 
