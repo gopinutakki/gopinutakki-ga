@@ -88,11 +88,11 @@ public class DeterministicCrowding {
         																		new BitStringFactory(evaluator.getCandidateBitLength()),
 	                                                                             new EvolutionPipeline<BitString>(operators),
 	                                                                             evaluator,
-	                                                                             new DeterministicCrowdingSelectionStrategy(evaluator.getPopulationGifStream()),
+	                                                                             new DeterministicCrowdingSelectionStrategy(evaluator),
 	                                                                             new MersenneTwisterRNG());
 	        //engine.addEvolutionObserver(new EvolutionLogger<BitString>());
 	        // add +1
-	        return engine.evolvePopulation(500, 0, new GenerationCount(15+1));
+	        return engine.evolvePopulation(500, 0, new GenerationCount(50+1));
 	    }
 	    
 	

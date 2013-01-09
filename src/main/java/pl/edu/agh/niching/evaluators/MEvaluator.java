@@ -5,17 +5,22 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.uncommons.maths.binary.BitString;
+import org.uncommons.watchmaker.framework.EvaluatedCandidate;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 public abstract class MEvaluator implements FitnessEvaluator<BitString>{
 	PrintStream populationStream;
+	private PrintStream peaksStream;
 	public MEvaluator() {
 		super();
 		//todo: close on disposing/destructor
 		try {
 			populationStream = new PrintStream(new File(getName()+"gif.log"));
+			peaksStream = new PrintStream(new File(getName()+"peak.log"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -34,6 +39,9 @@ public abstract class MEvaluator implements FitnessEvaluator<BitString>{
 		return true;
 	}
 	
+	public int peaksMaintened(List<BitString> selected){
+		return 0;
+	}
 	/**
 	 * Use this to print fitness function evaluation to stdout for gnuplot input.
 	 * 
@@ -47,5 +55,8 @@ public abstract class MEvaluator implements FitnessEvaluator<BitString>{
 		return populationStream;
 	}
 	
+	public PrintStream getPeaksStream() {
+		return peaksStream;
+	}
 	
 }
