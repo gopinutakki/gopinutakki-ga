@@ -47,17 +47,19 @@ public class Clearing {
 	
 	// TODO refactor, together with DC
 	public static void main(String[] args) {
+		System.out.print("Evolution in progress... ");
 		evolve(new M1Evaluator());
 		evolve(new M2Evaluator());
 		evolve(new M3Evaluator());
 		evolve(new M4Evaluator());
 		
 		try {
-			System.out.println("Generating graphs...");
+			System.out.print("OK\nGenerating graphs... ");
 			Process graphDrawing = Runtime.getRuntime().exec("gnuplot ./res/plotresult.cfg");
 			graphDrawing.waitFor();
-			//graphDrawing = Runtime.getRuntime().exec("gnuplot ./res/plotGifs.cfg");
-			//graphDrawing.waitFor();
+			graphDrawing = Runtime.getRuntime().exec("gnuplot ./res/plotGifs.cfg");
+			graphDrawing.waitFor();
+			System.out.println("OK\nDone.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -118,6 +120,6 @@ public class Clearing {
                                                                              new ClearingSelectionStrategy(evaluator.getPopulationGifStream()),
                                                                              new MersenneTwisterRNG());
         
-        return engine.evolvePopulation(500, 0, new GenerationCount(100));
+        return engine.evolvePopulation(500, 0, new GenerationCount(51));
     }
 }

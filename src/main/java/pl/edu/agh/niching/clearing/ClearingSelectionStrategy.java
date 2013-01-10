@@ -62,10 +62,11 @@ public class ClearingSelectionStrategy implements SelectionStrategy<Object> {
 		// fill the rest of selected pool
 		int i=0;
 		while (selected.size()<selectionSize) {
+			selectedEvaluated.add(selectedEvaluated.get(i));
 			selected.add(selected.get(i++));
 		}
 		
-		// FIXME what is this print for?
+		// to plot gifs
 		GraphHelper.printPopulationData(selectedEvaluated, selectedEvaluated.size(), 0, populationStream);
 		
 		return selected;
