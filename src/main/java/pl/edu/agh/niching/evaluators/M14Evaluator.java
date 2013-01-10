@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.uncommons.maths.binary.BitString;
+import org.uncommons.watchmaker.framework.EvaluatedCandidate;
 
 import pl.edu.agh.niching.GraphHelper;
 
@@ -34,6 +35,27 @@ public abstract class M14Evaluator extends MEvaluator{
 	
 	public double toDouble(BitString candidate) {
 		return candidate.toNumber().doubleValue() / (Math.pow(2, candidateBitLength)-1);
+	}
+	protected double[] peaks(){
+		return new double[]{};
+	}
+	
+	public int peaksMaintened(List<BitString> selected){
+		int peaksMaintened = 0;
+		for (double peakD: this.peaks()){		
+			Boolean foundInPeakArea = false;
+			for (BitString one : selected){
+				double oneD = toDouble(one);
+				if (oneD < peakD + 0.1 && oneD > peakD - 0.1){
+					foundInPeakArea = true;
+					break;
+				}
+			}
+			if (foundInPeakArea)
+				peaksMaintened++;
+		}
+		
+		return peaksMaintened;
 	}
 	
 	@Override

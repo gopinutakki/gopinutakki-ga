@@ -7,11 +7,17 @@ import java.util.Random;
 import org.uncommons.watchmaker.framework.EvaluatedCandidate;
 import org.uncommons.watchmaker.framework.SelectionStrategy;
 
+import pl.edu.agh.niching.evaluators.MEvaluator;
+
 public class DeterministicCrowdingSelectionStrategy implements SelectionStrategy<Object> {
 	PrintStream populationStream;
-	public DeterministicCrowdingSelectionStrategy(PrintStream populationStream){
+	private MEvaluator evaluator;
+	private PrintStream peaksStream;
+	public DeterministicCrowdingSelectionStrategy(MEvaluator evaluator){
 		super();
-		this.populationStream = populationStream;
+		this.evaluator = evaluator;
+		this.populationStream = evaluator.getPopulationGifStream();
+		this.peaksStream = evaluator.getPeaksStream();
 
 	}
 	static int i = 0;
@@ -25,8 +31,7 @@ public class DeterministicCrowdingSelectionStrategy implements SelectionStrategy
 		List<T> selected = new ArrayList<T>();
 		List<EvaluatedCandidate<T>> selectedEvaluated = new ArrayList<EvaluatedCandidate<T>>();
 		
-		for (Family<org.uncommons.maths.binary.BitString> family: PopulationRepository.population)
-		{
+		for (Family<org.uncommons.maths.binary.BitString> family: PopulationRepository.population){
 			// trzeba ustalic wartosc fitness
 			// wiec trzeba znaleźć w populacji osobniki
 			// byc moze nie trzeba tego, bo osobniki byc moze sa posortowane w liscie wg fitness
@@ -84,6 +89,9 @@ public class DeterministicCrowdingSelectionStrategy implements SelectionStrategy
 			
 		}
 		
+		
+		int peakMaintened = evaluator.peaksMaintened((List<org.uncommons.maths.binary.BitString>) selected);
+		this.peaksStream.println(peakMaintened);
 		GraphHelper.printPopulationData(selectedEvaluated, selectedEvaluated.size(), 0, populationStream);
 		//populationStream.println(" i:" + i +"selectedEvaluated: " + selectedEvaluated.size() + "selected:" + selected.size() + "population"+ population.size());
 		PopulationRepository.population.clear();
