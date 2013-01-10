@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.uncommons.maths.binary.BitString;
 
+import org.uncommons.maths.binary.BitString;
 import org.uncommons.watchmaker.framework.EvaluatedCandidate;
 import org.uncommons.watchmaker.framework.SelectionStrategy;
 
 import pl.edu.agh.niching.GraphHelper;
 
 public class ClearingSelectionStrategy implements SelectionStrategy<Object> {
-	long clearingRadius = 500000;
+	long clearingRadius = new Double(Math.pow(2, 27)).longValue();
 	private PrintStream populationStream;
 	/* Pseudokod:
 	 * 
@@ -37,6 +37,7 @@ public class ClearingSelectionStrategy implements SelectionStrategy<Object> {
 	@Override
 	public <T> List<T> select(List<EvaluatedCandidate<T>> population, boolean naturalFitnessScores, int selectionSize, Random rng) {
 		// clear the mating pool according to the algorithm above
+		// (assuming the population to be already sorted)
 		List<T> selected = new ArrayList<T>();
 		List<EvaluatedCandidate<T>> selectedEvaluated = new ArrayList<EvaluatedCandidate<T>>();
 		List<EvaluatedCandidate<T>> populationLeft = new CopyOnWriteArrayList<EvaluatedCandidate<T>>(population);
@@ -46,21 +47,25 @@ public class ClearingSelectionStrategy implements SelectionStrategy<Object> {
 			selected.add(best.getCandidate());
 			selectedEvaluated.add(best);
 			populationLeft.remove(0);
-			for (EvaluatedCandidate<T> elem : populationLeft) {
-				if (Math.abs(((BitString)best.getCandidate()).toNumber().longValue() - ((BitString)elem.getCandidate()).toNumber().longValue()) < clearingRadius)
+			for (EvaluatedCandidate<T> elem : population) {
+				if (Math.abs(((BitString)best.getCandidate()).toNumber().xor(((BitString)elem.getCandidate()).toNumber()).longValue()) < clearingRadius) {
 					populationLeft.remove(elem);
+					//System.err.println(elem.getCandidate()+" removed for "+best.getCandidate()+", left: "+populationLeft.size());
+				}
 			}
 		}
 		
-		if (selected.isEmpty()) for (EvaluatedCandidate<T> ec : population)
-			selected.add((T)ec.getCandidate());
+		// this should never happen
+		if (selected.isEmpty()) 
+			throw new Error("Empty mating pool (Clearing)");
 		
 		// fill the rest of selected pool
 		int i=0;
 		while (selected.size()<selectionSize) {
-			selected.add(selected.get(i));
+			selected.add(selected.get(i++));
 		}
 		
+		// FIXME what is this print for?
 		GraphHelper.printPopulationData(selectedEvaluated, selectedEvaluated.size(), 0, populationStream);
 		
 		return selected;

@@ -106,7 +106,9 @@ public class Clearing {
     	List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(1);
         
         operators.add(new BitStringCrossover());
+        // Mutation seems to have little efect on the result. Use whichever you want?
         operators.add(new BitStringMutation(new Probability(0.01)));
+        //operators.add(new ClearingBitStringMutation(new Probability(0.02)));
         
 
         EvolutionEngine<BitString> engine = new GenerationalEvolutionEngine<BitString>(
