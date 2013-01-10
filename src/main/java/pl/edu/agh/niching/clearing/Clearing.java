@@ -1,5 +1,8 @@
 package pl.edu.agh.niching.clearing;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +19,8 @@ import org.uncommons.watchmaker.framework.operators.BitStringMutation;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
 import org.uncommons.watchmaker.framework.termination.GenerationCount;
 
+import pl.edu.agh.niching.GraphHelper;
+import pl.edu.agh.niching.PopulationRepository;
 import pl.edu.agh.niching.evaluators.M1Evaluator;
 import pl.edu.agh.niching.evaluators.M2Evaluator;
 import pl.edu.agh.niching.evaluators.M3Evaluator;
@@ -38,12 +43,29 @@ public class Clearing {
 	 * return matingPool;
 	 */
 	
+	public static final String POPULATION_FILENAME_PREFIX = "population";
+	
+	// TODO refactor, together with DC
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		evolve(new M1Evaluator());
 		evolve(new M2Evaluator());
 		evolve(new M3Evaluator());
 		evolve(new M4Evaluator());
+		
+		try {
+			System.out.println("Generating graphs...");
+			Process graphDrawing = Runtime.getRuntime().exec("gnuplot ./res/plotresult.cfg");
+			graphDrawing.waitFor();
+			//graphDrawing = Runtime.getRuntime().exec("gnuplot ./res/plotGifs.cfg");
+			//graphDrawing.waitFor();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/**
@@ -51,7 +73,25 @@ public class Clearing {
 	 * @param evaluator
 	 */
 	private static void evolve(MEvaluator evaluator) {
-		// TODO
+		PopulationRepository.population.clear();
+		List<EvaluatedCandidate<BitString>> program = evolveProgram(evaluator);
+		
+		/* this should generate data for a graph
+		 * to draw it, use `gnuplot res\plotresult.cfg`
+		 */
+		PrintStream populationStream = null;
+		 //population at this point is twice big (), because contains 2 generations before selection
+		try {
+			populationStream = new PrintStream(new File(POPULATION_FILENAME_PREFIX + evaluator.getName()) + ".log");
+			GraphHelper.printPopulationData(program, program.size(), 0, populationStream);
+			//GraphHelper.printPopulationData(program, program.size(), 0, evaluator.getPopulationGifStream());
+			evaluator.plotFitnessFunction();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if(populationStream!=null) populationStream.close();
+		}
+		evaluator.getPopulationGifStream().close();
 	}
 	
 	/**
@@ -61,12 +101,12 @@ public class Clearing {
      * sets of input.
      */
     public static List<EvaluatedCandidate<BitString>> evolveProgram(MEvaluator evaluator) {
-    	
+    	// copy-paste from DC
     	
     	List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(1);
         
-        operators.add(new BitStringCrossover()); //XXX
-        operators.add(new BitStringMutation(new Probability(0.01))); //XXX
+        operators.add(new BitStringCrossover());
+        operators.add(new BitStringMutation(new Probability(0.01)));
         
 
         EvolutionEngine<BitString> engine = new GenerationalEvolutionEngine<BitString>(
@@ -76,7 +116,6 @@ public class Clearing {
                                                                              new ClearingSelectionStrategy(evaluator.getPopulationGifStream()),
                                                                              new MersenneTwisterRNG());
         
-        return engine.evolvePopulation(500, 0, new GenerationCount(16));
-    	// TODO
+        return engine.evolvePopulation(500, 0, new GenerationCount(100));
     }
 }
