@@ -49,6 +49,15 @@ public class ClearingSelectionStrategy implements SelectionStrategy<Object> {
 		List<EvaluatedCandidate<T>> selectedEvaluated = new ArrayList<EvaluatedCandidate<T>>();
 		List<EvaluatedCandidate<T>> populationLeft = new CopyOnWriteArrayList<EvaluatedCandidate<T>>(population);
 		
+		List<BitString> s = new ArrayList();
+		for (EvaluatedCandidate<T> c: population){
+			s.add((BitString) c.getCandidate());
+		}
+		
+		GraphHelper.printPopulationData(population, population.size(), 0, populationStream);
+		int peakMaintened = evaluator.peaksMaintened(s);
+		this.peaksStream.println(peakMaintened);
+		
 		while(selected.size()<selectionSize && !populationLeft.isEmpty()) {
 			EvaluatedCandidate<T> best = populationLeft.get(0); 
 			selected.add(best.getCandidate());
@@ -73,10 +82,9 @@ public class ClearingSelectionStrategy implements SelectionStrategy<Object> {
 			selected.add(selected.get(i++));
 		}
 		
-		int peakMaintened = evaluator.peaksMaintened((List<org.uncommons.maths.binary.BitString>) selected);
-		this.peaksStream.println(peakMaintened);
+
 		// to plot gifs
-		GraphHelper.printPopulationData(selectedEvaluated, selectedEvaluated.size(), 0, populationStream);
+
 		
 		return selected;
 	}

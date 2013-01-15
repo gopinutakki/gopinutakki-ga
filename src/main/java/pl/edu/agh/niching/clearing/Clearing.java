@@ -105,19 +105,19 @@ public class Clearing {
     public static List<EvaluatedCandidate<BitString>> evolveProgram(MEvaluator evaluator) {
     	// copy-paste from DC
     	
-    	List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(1);
+    	List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(2);
         
         operators.add(new BitStringCrossover());
         // Mutation seems to have little efect on the result. Use whichever you want?
-        operators.add(new BitStringMutation(new Probability(0.01)));
-        //operators.add(new ClearingBitStringMutation(new Probability(0.02)));
+        //operators.add(new BitStringMutation(new Probability(0.01)));
+        operators.add(new ClearingBitStringMutation(new Probability(0.02)));
         
 
         EvolutionEngine<BitString> engine = new GenerationalEvolutionEngine<BitString>(
     																		new BitStringFactory(evaluator.getCandidateBitLength()),
                                                                              new EvolutionPipeline<BitString>(operators),
                                                                              evaluator,
-                                                                             new ClearingSelectionStrategy(evaluator.getPopulationGifStream()),
+                                                                             new ClearingSelectionStrategy(evaluator),
                                                                              new MersenneTwisterRNG());
         
         return engine.evolvePopulation(500, 0, new GenerationCount(51));
