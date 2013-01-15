@@ -76,7 +76,7 @@ public class DeterministicCrowding {
 			 */
 
 	    	
-	        List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(1);
+	        List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(2);
 	        
 	        operators.add(new DeterministicCrowdingBitStringCrossover());
 	        operators.add(new DeterministicCrowdingBitStringMutation(new Probability(0.01)));
@@ -92,7 +92,7 @@ public class DeterministicCrowding {
 	                                                                             new MersenneTwisterRNG());
 	        //engine.addEvolutionObserver(new EvolutionLogger<BitString>());
 	        // add +1
-	        return engine.evolvePopulation(500, 0, new GenerationCount(50+1));
+	        return engine.evolvePopulation(500, 0, new GenerationCount(100+1));
 	    }
 	    
 	

@@ -11,10 +11,14 @@ import org.uncommons.watchmaker.framework.EvaluatedCandidate;
 import org.uncommons.watchmaker.framework.SelectionStrategy;
 
 import pl.edu.agh.niching.GraphHelper;
+import pl.edu.agh.niching.evaluators.MEvaluator;
 
 public class ClearingSelectionStrategy implements SelectionStrategy<Object> {
 	long clearingRadius = new Double(Math.pow(2, 27)).longValue();
 	private PrintStream populationStream;
+	private PrintStream peaksStream;
+	private MEvaluator evaluator;
+	
 	/* Pseudokod:
 	 * 
 	 * matingPool := population;
@@ -29,9 +33,12 @@ public class ClearingSelectionStrategy implements SelectionStrategy<Object> {
 	 * return matingPool;
 	 */
 	
-	public ClearingSelectionStrategy(PrintStream populationStream){
+	
+	public ClearingSelectionStrategy(MEvaluator evaluator){
 		super();
-		this.populationStream = populationStream;
+		this.evaluator = evaluator;
+		this.populationStream = evaluator.getPopulationGifStream();
+		this.peaksStream = evaluator.getPeaksStream();
 	}
 	
 	@Override
@@ -66,6 +73,8 @@ public class ClearingSelectionStrategy implements SelectionStrategy<Object> {
 			selected.add(selected.get(i++));
 		}
 		
+		int peakMaintened = evaluator.peaksMaintened((List<org.uncommons.maths.binary.BitString>) selected);
+		this.peaksStream.println(peakMaintened);
 		// to plot gifs
 		GraphHelper.printPopulationData(selectedEvaluated, selectedEvaluated.size(), 0, populationStream);
 		
