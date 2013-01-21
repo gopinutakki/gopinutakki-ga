@@ -1,4 +1,4 @@
-package pl.edu.agh.niching.clearing;
+package pl.edu.agh.niching;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,36 +15,27 @@ import org.uncommons.watchmaker.framework.EvolutionaryOperator;
 import org.uncommons.watchmaker.framework.GenerationalEvolutionEngine;
 import org.uncommons.watchmaker.framework.factories.BitStringFactory;
 import org.uncommons.watchmaker.framework.operators.BitStringCrossover;
+import org.uncommons.watchmaker.framework.operators.BitStringMutation;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
+import org.uncommons.watchmaker.framework.selection.RankSelection;
 import org.uncommons.watchmaker.framework.termination.GenerationCount;
 
-import pl.edu.agh.niching.GraphHelper;
-import pl.edu.agh.niching.PopulationRepository;
 import pl.edu.agh.niching.evaluators.M1Evaluator;
 import pl.edu.agh.niching.evaluators.M2Evaluator;
 import pl.edu.agh.niching.evaluators.M3Evaluator;
 import pl.edu.agh.niching.evaluators.M4Evaluator;
 import pl.edu.agh.niching.evaluators.MEvaluator;
 
-public class Clearing {
-	
-	/* Pseudocode:
-	 * 
-	 * matingPool := population;
-	 * Sort matingPool in descending order of fitness;
-	 * for i := 1 to |matingPool| do
-	 *   mi := matingPool[i];
-	 *   for j := i + 1 to |matingPool| do
-	 *     mj := matingPool[j];
-	 *     if distance(mi;mj) < sigma_clear then remove mj from matingPool;
-	 *   end
-	 * end
-	 * return matingPool;
-	 */
-	
+/**
+ * Plain genetic algorithm setting with rank selection and no niching.
+ * (Warning: draws graphs as deterministic crowding!)
+ * 
+ * @author Aleksandra Magura-Witkowska
+ */
+public class Plain {
 	public static final String POPULATION_FILENAME_PREFIX = "population";
 	
-	// TODO refactor, together with DC (lots of copy-pasted code)
+	// TODO refactor, together with other classes
 	public static void main(String[] args) {
 		System.out.print("Evolution in progress... ");
 		evolve(new M1Evaluator());
@@ -83,7 +74,6 @@ public class Clearing {
 		 * to draw it, use `gnuplot res\plotresult.cfg`
 		 */
 		PrintStream populationStream = null;
-		 //population at this point is twice big (), because contains 2 generations before selection
 		try {
 			populationStream = new PrintStream(new File(POPULATION_FILENAME_PREFIX + evaluator.getName()) + ".log");
 			GraphHelper.printPopulationData(program, program.size(), 0, populationStream);
@@ -109,18 +99,15 @@ public class Clearing {
     	List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(2);
         
         operators.add(new BitStringCrossover());
-        // Mutation seems to have little effect on the result. Use whichever you want?
-        //operators.add(new BitStringMutation(new Probability(0.01)));
-        operators.add(new ClearingBitStringMutation(new Probability(0.02)));
-        
+        operators.add(new BitStringMutation(new Probability(0.01)));
 
         EvolutionEngine<BitString> engine = new GenerationalEvolutionEngine<BitString>(
     																		new BitStringFactory(evaluator.getCandidateBitLength()),
                                                                              new EvolutionPipeline<BitString>(operators),
                                                                              evaluator,
-                                                                             new ClearingSelectionStrategy(evaluator),
+                                                                             new RankSelection(),
                                                                              new MersenneTwisterRNG());
         
-        return engine.evolvePopulation(500, 0, new GenerationCount(101));
+        return engine.evolvePopulation(500, 00, new GenerationCount(101));
     }
 }
