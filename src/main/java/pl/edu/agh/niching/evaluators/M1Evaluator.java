@@ -1,9 +1,5 @@
 package pl.edu.agh.niching.evaluators;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.uncommons.maths.binary.BitString;
 
 public class M1Evaluator extends M14Evaluator {
 

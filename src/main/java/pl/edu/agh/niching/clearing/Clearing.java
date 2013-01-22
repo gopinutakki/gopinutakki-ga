@@ -62,10 +62,8 @@ public class Clearing {
 			graphDrawing.waitFor();
 			System.out.println("OK\nDone.");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -83,11 +81,9 @@ public class Clearing {
 		 * to draw it, use `gnuplot res\plotresult.cfg`
 		 */
 		PrintStream populationStream = null;
-		 //population at this point is twice big (), because contains 2 generations before selection
 		try {
 			populationStream = new PrintStream(new File(POPULATION_FILENAME_PREFIX + evaluator.getName()) + ".log");
 			GraphHelper.printPopulationData(program, program.size(), 0, populationStream);
-			//GraphHelper.printPopulationData(program, program.size(), 0, evaluator.getPopulationGifStream());
 			evaluator.plotFitnessFunction();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -104,16 +100,12 @@ public class Clearing {
      * sets of input.
      */
     public static List<EvaluatedCandidate<BitString>> evolveProgram(MEvaluator evaluator) {
-    	// copy-pasted from DC
-    	
     	List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(2);
-        
+    	
         operators.add(new BitStringCrossover());
         // Mutation seems to have little effect on the result. Use whichever you want?
         //operators.add(new BitStringMutation(new Probability(0.01)));
         operators.add(new ClearingBitStringMutation(new Probability(0.02)));
-        
-
         EvolutionEngine<BitString> engine = new GenerationalEvolutionEngine<BitString>(
     																		new BitStringFactory(evaluator.getCandidateBitLength()),
                                                                              new EvolutionPipeline<BitString>(operators),

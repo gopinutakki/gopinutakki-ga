@@ -5,11 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.uncommons.maths.binary.BitString;
-import org.uncommons.watchmaker.framework.EvaluatedCandidate;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 public abstract class MEvaluator implements FitnessEvaluator<BitString>{
@@ -39,7 +37,7 @@ public abstract class MEvaluator implements FitnessEvaluator<BitString>{
 		return true;
 	}
 	
-	public int peaksMaintened(List<BitString> selected){
+	public int peaksMaintained(List<BitString> selected){
 		return 0;
 	}
 	/**

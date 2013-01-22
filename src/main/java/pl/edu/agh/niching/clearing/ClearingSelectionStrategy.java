@@ -49,14 +49,14 @@ public class ClearingSelectionStrategy implements SelectionStrategy<Object> {
 		List<EvaluatedCandidate<T>> selectedEvaluated = new ArrayList<EvaluatedCandidate<T>>();
 		List<EvaluatedCandidate<T>> populationLeft = new CopyOnWriteArrayList<EvaluatedCandidate<T>>(population);
 		
-		List<BitString> s = new ArrayList();
+		List<BitString> s = new ArrayList<BitString>();
 		for (EvaluatedCandidate<T> c: population){
 			s.add((BitString) c.getCandidate());
 		}
 		
 		GraphHelper.printPopulationData(population, population.size(), 0, populationStream);
-		int peakMaintened = evaluator.peaksMaintened(s);
-		this.peaksStream.println(peakMaintened);
+		int peakMaintained = evaluator.peaksMaintained(s);
+		this.peaksStream.println(peakMaintained);
 		
 		while(selected.size()<selectionSize && !populationLeft.isEmpty()) {
 			EvaluatedCandidate<T> best = populationLeft.get(0); 
@@ -66,7 +66,6 @@ public class ClearingSelectionStrategy implements SelectionStrategy<Object> {
 			for (EvaluatedCandidate<T> elem : population) {
 				if (Math.abs(((BitString)best.getCandidate()).toNumber().xor(((BitString)elem.getCandidate()).toNumber()).longValue()) < clearingRadius) {
 					populationLeft.remove(elem);
-					//System.err.println(elem.getCandidate()+" removed for "+best.getCandidate()+", left: "+populationLeft.size());
 				}
 			}
 		}
@@ -81,9 +80,6 @@ public class ClearingSelectionStrategy implements SelectionStrategy<Object> {
 			selectedEvaluated.add(selectedEvaluated.get(i));
 			selected.add(selected.get(i++));
 		}
-		
-
-		// to plot gifs
 
 		
 		return selected;

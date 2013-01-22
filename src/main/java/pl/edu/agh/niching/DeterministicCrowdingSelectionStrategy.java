@@ -90,7 +90,7 @@ public class DeterministicCrowdingSelectionStrategy implements SelectionStrategy
 		}
 		
 		
-		int peakMaintened = evaluator.peaksMaintened((List<org.uncommons.maths.binary.BitString>) selected);
+		int peakMaintened = evaluator.peaksMaintained((List<org.uncommons.maths.binary.BitString>) selected);
 		this.peaksStream.println(peakMaintened);
 		GraphHelper.printPopulationData(selectedEvaluated, selectedEvaluated.size(), 0, populationStream);
 		//populationStream.println(" i:" + i +"selectedEvaluated: " + selectedEvaluated.size() + "selected:" + selected.size() + "population"+ population.size());

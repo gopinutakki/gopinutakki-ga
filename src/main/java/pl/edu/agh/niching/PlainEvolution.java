@@ -17,7 +17,6 @@ import org.uncommons.watchmaker.framework.factories.BitStringFactory;
 import org.uncommons.watchmaker.framework.operators.BitStringCrossover;
 import org.uncommons.watchmaker.framework.operators.BitStringMutation;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
-import org.uncommons.watchmaker.framework.selection.RankSelection;
 import org.uncommons.watchmaker.framework.termination.GenerationCount;
 
 import pl.edu.agh.niching.evaluators.M1Evaluator;
@@ -32,10 +31,9 @@ import pl.edu.agh.niching.evaluators.MEvaluator;
  * 
  * @author Aleksandra Magura-Witkowska
  */
-public class Plain {
+public class PlainEvolution {
 	public static final String POPULATION_FILENAME_PREFIX = "population";
 	
-	// TODO refactor, together with other classes
 	public static void main(String[] args) {
 		System.out.print("Evolution in progress... ");
 		evolve(new M1Evaluator());
@@ -46,17 +44,15 @@ public class Plain {
 		try {
 			System.out.print("OK\nGenerating graphs... ");
 			Process graphDrawing = Runtime.getRuntime().exec("gnuplot ./res/plotresult.cfg");
+			Process graphDrawing2 = Runtime.getRuntime().exec("gnuplot ./res/plotGifs.cfg");
+			Process graphDrawing3 = Runtime.getRuntime().exec("gnuplot ./res/plotPeaks.cfg");
 			graphDrawing.waitFor();
-			graphDrawing = Runtime.getRuntime().exec("gnuplot ./res/plotGifs.cfg");
-			graphDrawing.waitFor();
-			graphDrawing = Runtime.getRuntime().exec("gnuplot ./res/plotPeaks.cfg");
-			graphDrawing.waitFor();
+			graphDrawing2.waitFor();
+			graphDrawing3.waitFor();
 			System.out.println("OK\nDone.");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -77,7 +73,6 @@ public class Plain {
 		try {
 			populationStream = new PrintStream(new File(POPULATION_FILENAME_PREFIX + evaluator.getName()) + ".log");
 			GraphHelper.printPopulationData(program, program.size(), 0, populationStream);
-			//GraphHelper.printPopulationData(program, program.size(), 0, evaluator.getPopulationGifStream());
 			evaluator.plotFitnessFunction();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -94,8 +89,6 @@ public class Plain {
      * sets of input.
      */
     public static List<EvaluatedCandidate<BitString>> evolveProgram(MEvaluator evaluator) {
-    	// copy-pasted from DC
-    	
     	List<EvolutionaryOperator<BitString>> operators = new ArrayList<EvolutionaryOperator<BitString>>(2);
         
         operators.add(new BitStringCrossover());
@@ -105,7 +98,7 @@ public class Plain {
     																		new BitStringFactory(evaluator.getCandidateBitLength()),
                                                                              new EvolutionPipeline<BitString>(operators),
                                                                              evaluator,
-                                                                             new RankSelection(),
+                                                                             new PlainSelection(evaluator),
                                                                              new MersenneTwisterRNG());
         
         return engine.evolvePopulation(500, 00, new GenerationCount(101));
