@@ -80,8 +80,6 @@ public class DeterministicCrowding {
 	        
 	        operators.add(new DeterministicCrowdingBitStringCrossover());
 	        operators.add(new DeterministicCrowdingBitStringMutation(new Probability(0.01)));
-	        //what is simplification, is it needed as in example
-	        //operators.add(new Simplification());
 	        
 
 	        EvolutionEngine<BitString> engine = new GenerationalEvolutionEngine<BitString>(
@@ -90,7 +88,6 @@ public class DeterministicCrowding {
 	                                                                             evaluator,
 	                                                                             new DeterministicCrowdingSelectionStrategy(evaluator),
 	                                                                             new MersenneTwisterRNG());
-	        //engine.addEvolutionObserver(new EvolutionLogger<BitString>());
 	        // add +1
 	        return engine.evolvePopulation(500, 0, new GenerationCount(100+1));
 	    }

@@ -36,8 +36,7 @@ public class DeterministicCrowdingSelectionStrategy implements SelectionStrategy
 			// wiec trzeba znaleźć w populacji osobniki
 			// byc moze nie trzeba tego, bo osobniki byc moze sa posortowane w liscie wg fitness
 			// wydajnościowo to moze byc slabe
-			//EvaluatedCandidate<BitString> parent1 = GetEvaluatedCandidate(population, family.Parent1);
-			//EvaluatedCandidate<BitString> parent2 = GetEvaluatedCandidate(population, family.Parent2);
+
 			
 			// dobieramy rodzicow i dzieci w pary gdzie rodzic i dziecko sa bardziej podobni do siebie
 			EvaluatedCandidate<T> parent1 = GetEvaluatedCandidate(population, family.getParent1());
@@ -93,22 +92,19 @@ public class DeterministicCrowdingSelectionStrategy implements SelectionStrategy
 		int peakMaintened = evaluator.peaksMaintained((List<org.uncommons.maths.binary.BitString>) selected);
 		this.peaksStream.println(peakMaintened);
 		GraphHelper.printPopulationData(selectedEvaluated, selectedEvaluated.size(), 0, populationStream);
-		//populationStream.println(" i:" + i +"selectedEvaluated: " + selectedEvaluated.size() + "selected:" + selected.size() + "population"+ population.size());
 		PopulationRepository.population.clear();
 
 		// first time there no crossing so nothing in repostiory, so wer returning all
-		// TODO change
+
 		if (selected.size() == 0){
 			GraphHelper.printPopulationData(population, population.size(), 0, populationStream);
 			for (EvaluatedCandidate<T> cand :population){
 				selected.add(cand.getCandidate());
 			}
 		}
-		//System.out.println( "Pop count: " + selected.size() );
 		return selected;
 	}
 	
-	//FIXME: czasem nie ma w poplacji tego co w family, dlaczego?
 	private <T> EvaluatedCandidate<T> GetEvaluatedCandidate(List<EvaluatedCandidate<T>> population, org.uncommons.maths.binary.BitString one){
 
 			for (EvaluatedCandidate<T> evaluatedCandidate: population){

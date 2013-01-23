@@ -15,12 +15,10 @@ public abstract class MEvaluator implements FitnessEvaluator<BitString>{
 	private PrintStream peaksStream;
 	public MEvaluator() {
 		super();
-		//todo: close on disposing/destructor
 		try {
 			populationStream = new PrintStream(new File(getName()+"gif.log"));
 			peaksStream = new PrintStream(new File(getName()+"peak.log"));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
